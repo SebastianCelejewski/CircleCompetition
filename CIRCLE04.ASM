@@ -2,7 +2,7 @@
 code segment use16
 assume cs:code, ds:code, es:code
 
-; Circle 03: a disk in 320x200 graphics mode
+; Circle 04: real circle, not a disk
 
 org 100h
 
@@ -70,11 +70,19 @@ calculate_colour:
        add cx, ax
 
        cmp cx, 800h
-       jbe set
+       jbe inside_disk
        mov dl, 0h
        jmp exit
-set:
+
+inside_disk:
+       cmp cx, 780h
+       jbe too_low
        mov dl, colour
+       jmp exit
+
+too_low:
+       mov dl, 0h
+
 exit:
        pop cx
        pop bx
@@ -101,7 +109,7 @@ calculate_offset:
        pop ax
        ret
 
-colour db 01h
+colour db 02h
 
 code ends
 end start
